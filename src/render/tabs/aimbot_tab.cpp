@@ -302,7 +302,8 @@ namespace render
 
 						ImGui::SliderFloatLeftAligned("Smooth:", &settings->smooth, 1, 15.f, "%.1f");
 
-						ImGui::SliderIntLeftAligned("Backtrack:", &settings->backtrack.ticks, 0, 12, settings->backtrack.ticks == 1 ? "%1.f tick" : "%1.f ticks");
+						ImGui::SliderIntLeftAligned("(?-!) Backtrack:", &settings->backtrack.ticks, 0, 12, settings->backtrack.ticks == 1 ? "%1.f tick" : "%1.f ticks");
+						tooltip("Backtrack wont work because of fix for bug which was introduced with Operation Riptide");
 
 						ImGui::SliderIntLeftAligned("Hit Chance:", &settings->min_hitchanse, 0, 100, "%.0f%%");
 					}

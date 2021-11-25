@@ -510,7 +510,18 @@ namespace aimbot
 
 		duplicates.clear();
 
-		const auto max_time = TICKS_TO_TIME(std::clamp<int>(a_settings.backtrack.ticks, 0, 12) + 1);
+		/*
+			MartiNJ409 - 25th November 2021: I have found a ghetto fix for the aimbot bug which makes aimbot lock on backtrack records.
+
+			Valve somehow fucked up lag compensation since the Riptide Operation update (~22nd October 2021).
+
+			Since this is a ghetto fix it means that backtrack wont work.
+		*/
+
+		//const auto max_time = TICKS_TO_TIME(std::clamp<int>(a_settings.backtrack.ticks, 0, 12) + 1);
+
+		const auto max_time = TICKS_TO_TIME(std::clamp<int>(a_settings.backtrack.ticks, 1, 11) + 1);
+
 		for (const auto& tick_data : entities::m_items)
 		{
 			for (const auto& player_data : tick_data.players)
@@ -523,8 +534,11 @@ namespace aimbot
 
 				const auto sim_time = _is_backshot ? player_data.m_flShotTime : player_data.m_flSimulationTime;
 				const auto delta_time = fabsf(out_delay - (correct_nexttime - sim_time - interpolation_time));
-				if (!player_data.eye_pos.IsValid() || delta_time > 0.2f || delta_time > max_time)
+				if (!player_data.eye_pos.IsValid() || delta_time > 0.03f || delta_time > max_time)
 					continue;
+
+				//if (!player_data.eye_pos.IsValid() || delta_time > 0.2f || delta_time > max_time)
+					//continue;
 
 				const auto result_of_duplicates = std::find_if(duplicates.begin(), duplicates.end(), [player_data](entity_pos_t const& c)
 				{
