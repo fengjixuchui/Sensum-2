@@ -314,10 +314,9 @@ class CCSGOPlayerAnimState;
 class c_base_player : public c_base_entity
 {
 public:
-
 	NETVAR(bool, m_bHasDefuser, "CCSPlayer", "m_bHasDefuser");
 	NETVAR(bool, m_bGunGameImmunity, "CCSPlayer", "m_bGunGameImmunity");
-	NETVAR(int32_t, m_iShotsFired, "CCSPlayer", "m_iShotsFired");
+	NETVAR(int, m_iShotsFired, "CCSPlayer", "m_iShotsFired");
 	NETVAR(QAngle, m_angEyeAngles, "CCSPlayer", "m_angEyeAngles[0]");
 	NETVAR(Vector, m_angEyeAngles2, "CCSPlayer", "m_angEyeAngles[0]");
 	NETVAR(int, m_ArmorValue, "CCSPlayer", "m_ArmorValue");
@@ -326,25 +325,25 @@ public:
 	NETVAR(bool, m_bIsScoped, "CCSPlayer", "m_bIsScoped");
 	NETVAR(bool, m_bIsDefusing, "CCSPlayer", "m_bIsDefusing");
 	NETVAR(float, m_flLowerBodyYawTarget, "CCSPlayer", "m_flLowerBodyYawTarget");
-	NETVAR(int32_t, m_iHealth, "CBasePlayer", "m_iHealth");
-	NETVAR(int32_t, m_lifeState, "CBasePlayer", "m_lifeState");
-	NETVAR(int32_t, m_fFlags, "CBasePlayer", "m_fFlags");
-	NETVAR(int32_t, m_nTickBase, "CBasePlayer", "m_nTickBase");
+	NETVAR(int, m_iHealth, "CBasePlayer", "m_iHealth");
+	NETVAR(int, m_lifeState, "CBasePlayer", "m_lifeState");
+	NETVAR(int, m_fFlags, "CBasePlayer", "m_fFlags");
+	NETVAR(int, m_nTickBase, "CBasePlayer", "m_nTickBase");
 	NETVAR(Vector, m_vecViewOffset, "CBasePlayer", "m_vecViewOffset[0]");
 	NETVAR(QAngle, m_viewPunchAngle, "CBasePlayer", "m_viewPunchAngle");
 	NETVAR(QAngle, m_aimPunchAngle, "CBasePlayer", "m_aimPunchAngle");
 	NETVAR(CHandle<c_base_view_model>, m_hViewModel, "CBasePlayer", "m_hViewModel[0]");
 	NETVAR(Vector, m_vecVelocity, "CBasePlayer", "m_vecVelocity[0]");
 	NETVAR(float, m_flMaxspeed, "CBasePlayer", "m_flMaxspeed");
-	NETVAR(int32_t, m_iObserverMode, "CBasePlayer", "m_iObserverMode");
+	NETVAR(int, m_iObserverMode, "CBasePlayer", "m_iObserverMode");
 	NETVAR(CHandle<c_base_player>, m_hObserverTarget, "CBasePlayer", "m_hObserverTarget");
 	NETVAR(float, m_flFlashMaxAlpha, "CCSPlayer", "m_flFlashMaxAlpha");
 	NETVAR_OFFSET(float, m_flFlashMaxAlphaOffset, "CCSPlayer", "m_flFlashMaxAlpha", -0x8);
-	NETVAR(int32_t, m_nHitboxSet, "CBaseAnimating", "m_nHitboxSet");
-	NETVAR(int32_t, m_nForceBone, "CBaseAnimating", "m_nForceBone");
+	NETVAR(int, m_nHitboxSet, "CBaseAnimating", "m_nHitboxSet");
+	NETVAR(int, m_nForceBone, "CBaseAnimating", "m_nForceBone");
 	NETVAR(bool, m_bClientSideAnimation, "CBaseAnimating", "m_bClientSideAnimation");
 	NETVAR(CHandle<c_base_combat_weapon>, m_hActiveWeapon, "CBaseCombatCharacter", "m_hActiveWeapon");
-	NETVAR(int32_t, m_iAccount, "CCSPlayer", "m_iAccount");
+	NETVAR(int, m_iAccount, "CCSPlayer", "m_iAccount");
 	NETVAR(float, m_flFlashDuration, "CCSPlayer", "m_flFlashDuration");
 	NETVAR(float, m_flSimulationTime, "CBaseEntity", "m_flSimulationTime");
 	NETVAR(float, m_flCycle, "CServerAnimationData", "m_flCycle");
@@ -359,12 +358,12 @@ public:
 	NETVAR(float, m_flDuckAmount, "CBaseEntity", "m_flDuckAmount");
 	NETVAR(int, m_nSurvivalTeam, "CCSPlayer", "m_nSurvivalTeam");
 	NETVAR(int, m_iMoney, "CCSPlayer", "m_iAccount");
-	NETVAR(int32_t, m_iFOV, "CBasePlayer", "m_iFOV");
-	NETVAR(int32_t, m_iDefaultFOV, "CBasePlayer", "m_iDefaultFOV");
+	NETVAR(int, m_iFOV, "CBasePlayer", "m_iFOV");
+	NETVAR(int, m_iDefaultFOV, "CBasePlayer", "m_iDefaultFOV");
 	PNETVAR(CHandle<c_base_combat_weapon>, m_hMyWeapons, "CBaseCombatCharacter", "m_hMyWeapons");
-	NETVAR(int[48], weapons, "CBaseCombatCharacter", "m_hMyWeapons");
 	PNETVAR(CBaseHandle, m_hMyWearables, "CBaseCombatCharacter", "m_hMyWearables");
 	NETVAR_OFFSET(QAngle*, GetVAngles, "CBasePlayer", "deadflag", +0x4);
+	NETVAR(CBaseHandle, m_hGroundEntity, "CBasePlayer", "m_hGroundEntity");
 
 	CUserCmd*& m_pCurrentCommand();
 	Vector        GetEyePos();

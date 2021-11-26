@@ -553,13 +553,8 @@ namespace aimbot
 				auto player = c_base_player::GetPlayerByIndex(player_data.index);
 				if (!player || !player->IsPlayer() || !player->IsAlive() || player->is_dormant())
 					continue;
-
-				auto model = player->GetModel();
-				if (!model)
-					continue;
-
-				auto hdr = g::mdl_info->GetStudiomodel(model);
-				if (!hdr)
+				
+				if (a_settings.check_air && player->m_hGroundEntity().Get() == NULL)
 					continue;
 
 				duplicates.push_back({ player_data.index, player_data.m_flSimulationTime, player_data.eye_pos, player_data.world_pos });
@@ -584,11 +579,8 @@ namespace aimbot
 
 				for (const auto& hitbox_id : hitbox_ids)
 				{
-					//TODO: hitbox not switching properly - get_backtrack_data() is fucking up aimbot.
-
-					//const auto& hitbox = player_data.hitboxes[hitbox_id][0];
-					const auto& hitbox = _data.count(player_data.index) > 0 ? !(_data.at(player_data.index).front().is_moving) ? _data.at(player_data.index).front().hitboxes : player_data.hitboxes[hitbox_id][0] : player_data.hitboxes[hitbox_id][0];
-
+					const auto& hitbox = player_data.hitboxes[hitbox_id][0];
+					
 					if (!hitbox.IsValid())
 						continue;
 
