@@ -333,8 +333,7 @@ namespace render
 					checkbox("First Bullet", &settings->recoil.first_bullet);
 					checkbox("Target Chest While Spraying (?)", &settings->rcs_override_hitbox);
 					tooltip("Aimbot will lock on chest if your iShotsFired is over 3.");
-					checkbox("Random Yaw & Pitch Amount (?)", &settings->recoil.humanize);
-					tooltip("Will randomize yaw and pitch.");
+					checkbox("Humanization", &settings->recoil.humanize);
 					
 					float pitch_max = 2.0f, yaw_max = 2.0f;
 

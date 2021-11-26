@@ -287,12 +287,6 @@ namespace aimbot
 		auto x = a_settings.recoil.pitch;
 		auto y = a_settings.recoil.yaw;
 
-		if (a_settings.recoil.humanize)
-		{
-			x += utils::random(0.1f, 0.5f);
-			y += utils::random(0.1f, 0.6f);
-		}
-
 		static auto weapon_recoil_scale = g::cvar->find("weapon_recoil_scale");
 		float scale = weapon_recoil_scale->GetFloat();
 
@@ -305,6 +299,12 @@ namespace aimbot
 		//The perfect value for rcs IMO is 2.52f on both axis.
 		x += (scale *= 1.26f) / 4.84615f; //Dont mind this magic number its just calculated...
 		y += scale / 4.84615f;			  //...so the result at 100% yaw/pitch is always at 2.52f	
+
+		if (a_settings.recoil.humanize)
+		{
+			x -= utils::random(0.1f, 0.5f);
+			y -= utils::random(0.1f, 0.6f);
+		}
 
 		if (x <= 0 && y <= 0)
 			return false;

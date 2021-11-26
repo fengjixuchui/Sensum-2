@@ -516,10 +516,29 @@ float math::GetRealDistanceFOV(const float& distance, const QAngle& current, con
 	angle2vectors(aim, v_aim);
 
 	float delta_distance = v_current.DistTo(v_aim);
-	
+
 	float real_distance = sin(D3DXToRadian(delta_distance)) * distance;
 
-	float value = sqrtf(powf(delta.pitch, 2.0f) + powf(delta.yaw, 2.0f)) * real_distance;
+	float multiplier;
+
+	if (distance <= 100.f)
+		multiplier = 2.f;
+
+	if (distance > 100.f && distance <= 200.f)
+		multiplier = 1.05f;
+
+	if (distance > 200.f && distance <= 400.f)
+		multiplier = 1.05f;
+
+	if (distance > 400.f && distance <= 600.f)
+		multiplier = 1.05f;
+
+	if (distance > 600.f)
+		multiplier = 1.15f;
+
+	multiplier = std::clamp(multiplier, 0.f, 2.0f);
+
+	float value = sqrtf(powf(delta.pitch, 2.0f) + powf(delta.yaw, 2.0f)) * real_distance * multiplier;
 
 	value = std::clamp(value, -180.0f, 180.0f);
 
@@ -597,7 +616,7 @@ void math::smooth(const float& amount, const QAngle& current_angles, const QAngl
 	auto delta = aim_vector - current_vector;
 	if (humanize)
 	{
-		//delta.x += utils::random(-0.02f, 0.02f);
+		delta.x += utils::random(-0.02f, 0.02f);
 		delta.y += utils::random(-0.01f, 0.01f);
 		delta.z += utils::random(-0.01f, 0.01f);
 	}
