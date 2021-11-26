@@ -18,6 +18,9 @@
 #include <stddef.h>         // ptrdiff_t, NULL
 #include <string.h>         // memset, memmove, memcpy, strlen, strchr, strcpy, strcmp
 
+#include "../valve_sdk/math/Vectors.hpp"
+#include "../helpers/math.h"
+
 #define IMGUI_VERSION       "1.60"
 
 // Define attributes of all API symbols declarations, e.g. for DLL under Windows.
@@ -1616,6 +1619,8 @@ struct ImDrawList
 	IMGUI_API void  AddPolyline(const ImVec2* points, const int num_points, ImU32 col, bool closed, float thickness);
 	IMGUI_API void  AddConvexPolyFilled(const ImVec2* points, const int num_points, ImU32 col);
 	IMGUI_API void  AddBezierCurve(const ImVec2& pos0, const ImVec2& cp0, const ImVec2& cp1, const ImVec2& pos1, ImU32 col, float thickness, int num_segments = 0);
+	IMGUI_API void  AddRing3D(const Vector& pos, int16_t radius, uint16_t points, ImU32 color, float thickness);
+	
 
 	// Stateful path API, add points then finish with PathFill() or PathStroke()
 	inline    void  PathClear() { _Path.resize(0); }

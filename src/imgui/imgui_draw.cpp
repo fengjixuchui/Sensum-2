@@ -1110,6 +1110,33 @@ void ImDrawList::AddBezierCurve(const ImVec2& pos0, const ImVec2& cp0, const ImV
 	PathStroke(col, false, thickness);
 }
 
+void ImDrawList::AddRing3D(const Vector& pos, int16_t radius, uint16_t points, ImU32 color, float thickness)
+{
+	float step = (float)M_PI * 2.0f / points;
+
+	Vector start2d, end2d;
+
+	for (float a = 0; a < (M_PI * 2.0f); a += step)
+	{
+		Vector start(radius * cosf(a) + pos.x, radius * sinf(a) + pos.y, pos.z);
+		Vector end(radius * cosf(a + step) + pos.x, radius * sinf(a + step) + pos.y, pos.z);
+
+		Vector start22d(start2d.x, start2d.y);
+		Vector end22d(end2d.x, end2d.y);
+
+		if (math::world2screen(start, start2d) && math::world2screen(end, end2d))
+		{
+			start22d.x = start2d.x;
+			start22d.y = start2d.y;
+
+			end22d.x = end2d.x;
+			end22d.y = end2d.y;
+
+			AddLine(ImVec2(start22d.x, start22d.y), ImVec2(end22d.x, end22d.y), color, thickness);
+		}
+	}
+}
+
 void ImDrawList::AddText(const ImFont* font, float font_size, const ImVec2& pos, ImU32 col, const char* text_begin, const char* text_end, float wrap_width, const ImVec4* cpu_fine_clip_rect)
 {
 	if ((col & IM_COL32_A_MASK) == 0)

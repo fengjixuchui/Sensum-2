@@ -137,7 +137,6 @@
     <ClCompile Include="features\no_flash.cpp" />
     <ClCompile Include="features\no_smoke.cpp" />
     <ClCompile Include="features\popflash_helper.cpp" />
-    <ClCompile Include="features\resolver.cpp" />
     <ClCompile Include="features\selfnade.cpp" />
     <ClCompile Include="features\slow_walk.cpp" />
     <ClCompile Include="features\sounds.cpp" />
@@ -205,7 +204,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="classids.h" />
-    <ClInclude Include="features\esp.hpp" />
     <ClInclude Include="features\hegrenade_helper.h" />
     <ClInclude Include="features\molotov_helper.h" />
     <ClInclude Include="features\nade_helper.h" />

@@ -64,8 +64,19 @@ namespace chams
 
 namespace esp
 {
+	struct dmg_indicator_t
+	{
+		int damage;
+		bool is_initialized;
+		float erase_time;
+		float last_update_time;
+		c_base_player* player;
+		Vector pos;
+	};
+
 	void render(ImDrawList* draw_list);
 	void render_helpers();
+	extern std::vector<dmg_indicator_t> dmg_indicator;
 }
 
 namespace aimbot
@@ -153,11 +164,6 @@ namespace clantag
 namespace slow_walk
 {
 	void handle(CUserCmd* cmd);
-}
-
-namespace resolver
-{
-	void handle();
 }
 
 namespace no_flash

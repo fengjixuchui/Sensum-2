@@ -220,7 +220,6 @@ namespace render
 						checkbox("Zoom Check", &settings->check_zoom);
 
 					checkbox("Target Teammates", &settings::misc::deathmatch);
-					checkbox("Resolver", &settings::desync::resolver);
 
 					columns(2);
 					{

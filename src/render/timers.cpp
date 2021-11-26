@@ -7,7 +7,6 @@
 #include "..//helpers/notifies.h"
 #include "render.h"
 #include "../features/Sounds.h"
-#include "../features/esp.hpp"
 
 namespace render
 {

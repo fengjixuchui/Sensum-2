@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include "../valve_sdk/csgostructs.hpp"
-#include "esp.hpp"
 #include "../features/features.h"
 #include "../settings/globals.h"
 

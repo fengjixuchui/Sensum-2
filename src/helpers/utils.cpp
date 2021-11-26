@@ -8,7 +8,6 @@
 #include "../imgui/imgui_internal.h"
 #include "../valve_sdk/csgostructs.hpp"
 #include "..//render/render.h"
-#include "../features/esp.hpp"
 
 #define NOMINMAX
 #include <Windows.h>

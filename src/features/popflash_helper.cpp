@@ -134,7 +134,8 @@ namespace visuals
 					{
 						if (g::local_player->m_hActiveWeapon()->IsFlash() && dist <= 1000.f)
 						{
-							VGSHelper::Get().drawring_3d(ppos.x, ppos.y, ppos.z - it.ring_height, 15.f, 255, Color::Red, 1.0f);
+							ppos = Vector(ppos.x, ppos.y, ppos.z - it.ring_height);
+							globals::draw_list->AddRing3D(ppos, 15.f, 255, IM_COL32(255, 0, 0, 255), 1.0f);
 						}
 					}
 				}

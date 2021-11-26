@@ -4,7 +4,6 @@
 #include "../features/Sounds.h"
 #include "../helpers/HitPossitionHelper.h"
 #include "../helpers/runtime_saver.h"
-#include "../features/esp.hpp"
 
 std::map<std::string, std::string> weaponNames =
 {
@@ -168,13 +167,13 @@ class c_game_event_listener final : public IGameEventListener2
 			{
 				if (target != g::local_player && attacker == g::local_player)
 				{
-					dmg_indicator DmgIndicator;
-					DmgIndicator.iDamage = context->GetInt("dmg_health");
-					DmgIndicator.Player = target;
-					DmgIndicator.flEraseTime = g::local_player->m_nTickBase() * g::global_vars->interval_per_tick + 2.f; //was 3.f
-					DmgIndicator.bInitialized = false;
+					esp::dmg_indicator_t indicator;
+					indicator.damage = context->GetInt("dmg_health");
+					indicator.player = target;
+					indicator.erase_time = g::local_player->m_nTickBase() * g::global_vars->interval_per_tick + 2.f; //was 3.f
+					indicator.is_initialized = false;
 
-					indicator.push_back(DmgIndicator);
+					esp::dmg_indicator.push_back(indicator);
 				}
 			}
 

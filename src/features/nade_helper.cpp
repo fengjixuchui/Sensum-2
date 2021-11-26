@@ -128,7 +128,9 @@ namespace visuals
 					{
 						if (g::local_player->m_hActiveWeapon()->IsSmoke() && dist <= 500.f)
 						{
-							VGSHelper::Get().drawring_3d(ppos.x, ppos.y, ppos.z - it.ring_height, 15.f, 255, Color::White, 1.0f);
+							ppos = Vector(ppos.x, ppos.y, ppos.z - it.ring_height);
+							globals::draw_list->AddRing3D(ppos, 15.f, 255, IM_COL32_WHITE, 1.0f);
+							//VGSHelper::Get().drawring_3d(ppos.x, ppos.y, ppos.z - it.ring_height, 15.f, 255, Color::White, 1.0f);
 						}
 					}
 				}

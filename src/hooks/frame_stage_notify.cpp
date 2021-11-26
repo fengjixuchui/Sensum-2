@@ -41,7 +41,6 @@ namespace hooks
 
 		else if (stage == FRAME_NET_UPDATE_POSTDATAUPDATE_START) {
 			skins::handle();
-			resolver::handle();
 		}
 
 		else if (stage == FRAME_NET_UPDATE_START && g::engine_client->IsInGame()) {

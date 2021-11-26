@@ -5,7 +5,6 @@
 #include "../helpers/console.h"
 #include "../helpers/entities.h"
 #include "../helpers/autowall.h"
-#include "../features/esp.hpp"
 #include "../valve_sdk/interfaces/ISurface.h"
 #include "../render/fonts/undefeated.hpp"
 #include "../helpers/entities.h"
@@ -41,21 +40,14 @@ void draw_circle(Color& colors, const Vector& position)
 		g::view_render_beams->DrawBeam(beam);
 }
 
-ConVar* type = nullptr;
-ConVar* mode = nullptr;
-
 entities::sound_t _sounds[MAX_PLAYERS];
-
-ImU32 GetU32(Color _color)
-{
-	return ((_color[3] & 0xff) << 24) + ((_color[2] & 0xff) << 16) + ((_color[1] & 0xff) << 8)
-		+ (_color[0] & 0xff);
-}
 
 namespace esp
 {
 	decltype(entities::m_local) m_local;
 	entities::player_data_t m_entities[MAX_PLAYERS];
+
+	std::vector<dmg_indicator_t> dmg_indicator;
 
 	float last_time = 0.f;
 
@@ -69,6 +61,9 @@ namespace esp
 
 	bool is_matchmaking()
 	{
+		static ConVar* type = nullptr;
+		static ConVar* mode = nullptr;
+
 		if (!type)
 			type = g::cvar->find("game_type");
 
@@ -622,183 +617,4 @@ namespace esp
 		}
 		ImGui::PopFont();
 	}
-}
-
-void VGSHelper::Init()
-{
-	for (int size = 1; size < 128; size++)
-	{
-		fonts[size] = g::surface->CreateFont_();
-		g::surface->SetFontGlyphSet(fonts[size], "Sans-serif", size, 700, 0, 0, FONTFLAG_DROPSHADOW, FONTFLAG_ANTIALIAS);
-
-		icons[size] = g::surface->CreateFont_();
-		g::surface->SetFontGlyphSet(icons[size], (const char*)undefeated_compressed_data, undefeated_compressed_size, 700, 0, 0, FONTFLAG_DROPSHADOW, FONTFLAG_ANTIALIAS);
-	}
-
-	Inited = true;
-}
-
-void VGSHelper::DrawText(std::string text, float x, float y, Color color, int size)
-{
-	if (!Inited)
-		Init();
-
-	//int size = text.size() + 1;
-	g::surface->DrawClearApparentDepth();
-	wchar_t buf[256];
-	g::surface->DrawSetTextFont(fonts[size]);
-	g::surface->DrawSetTextColor(color);
-
-	if (MultiByteToWideChar(CP_UTF8, 0, text.c_str(), -1, buf, 256))
-	{
-		g::surface->DrawSetTextPos(x, y);
-		g::surface->DrawPrintText(buf, wcslen(buf));
-	}
-}
-
-void VGSHelper::drawring_3d(int16_t x, int16_t y, int16_t z, int16_t radius, uint16_t points, Color color1, float thickness)
-{
-	Vector pos = Vector(x, y, z);
-
-	float step = (float)M_PI * 2.0f / points;
-
-	for (float a = 0; a < (M_PI * 2.0f); a += step)
-	{
-		Vector start(radius * cosf(a) + pos.x, radius * sinf(a) + pos.y, pos.z);
-		Vector end(radius * cosf(a + step) + pos.x, radius * sinf(a + step) + pos.y, pos.z);
-
-		Vector start2d;
-		Vector end2d;
-
-		Vector start22d(start2d.x, start2d.y);
-		Vector end22d(end2d.x, end2d.y);
-		if (math::world2screen(start, start2d) &&
-			math::world2screen(end, end2d))
-		{
-			start22d.x = start2d.x;
-			start22d.y = start2d.y;
-
-			end22d.x = end2d.x;
-			end22d.y = end2d.y;
-
-			globals::draw_list->AddLine(ImVec2(start22d.x, start22d.y), ImVec2(end22d.x, end22d.y), utils::to_im32(color1), thickness);
-		}
-	}
-}
-
-void VGSHelper::DrawIcon(std::string text, float x, float y, Color color, int size)
-{
-	if (!Inited)
-		Init();
-
-	//int size = text.size() + 1;
-	g::surface->DrawClearApparentDepth();
-	wchar_t buf[256];
-	g::surface->DrawSetTextFont(icons[size]);
-	g::surface->DrawSetTextColor(color);
-
-	if (MultiByteToWideChar(CP_UTF8, 0, text.c_str(), -1, buf, 256))
-	{
-		g::surface->DrawSetTextPos(x, y);
-		g::surface->DrawPrintText(buf, wcslen(buf));
-	}
-}
-
-void VGSHelper::DrawLine(float x1, float y1, float x2, float y2, Color color, float size)
-{
-	/*
-	if (outline) {
-		g_VGuiSurface->DrawSetColor(Color::Black);
-		//g_VGuiSurface->DrawSetApparentDepth(size + 1.f);
-		//g_VGuiSurface->DrawLine(x1, y1, x2, y2);
-		g_VGuiSurface->DrawFilledRect(x1 - size, y1 - size, x2 + size, y2 + size);
-	}
-	*/
-	g::surface->DrawSetColor(color);
-
-	if (size == 1.f)
-		g::surface->DrawLine(x1, y1, x2, y2);
-	else
-		g::surface->DrawFilledRect(x1 - (size / 2.f), y1 - (size / 2.f), x2 + (size / 2.f), y2 + (size / 2.f));
-}
-void VGSHelper::DrawBox(float x1, float y1, float x2, float y2, Color clr, float size)
-{
-	/*
-	if (outline) {
-		g_VGuiSurface->DrawSetColor(Color::Black);
-		g_VGuiSurface->DrawFilledRect(x1 - 1.f, y1, x1 + 1.f, y2); // left
-		g_VGuiSurface->DrawFilledRect(x2 - 1.f, y1, x2 + 1.f, y2); // right
-		g_VGuiSurface->DrawFilledRect(x1, y1 - 1.f, x2, y1 + 1.f); // top
-		g_VGuiSurface->DrawFilledRect(x1, y2 - 1.f, x2, y2 + 1.f); // bottom
-	}
-	*/
-	//g_VGuiSurface->DrawSetColor(clr);
-	//g_VGuiSurface->DrawSetApparentDepth(size);
-	//g_VGuiSurface->DrawOutlinedRect(static_cast<int>(x1), static_cast<int>(y1), static_cast<int>(x2), static_cast<int>(y2));
-	DrawLine(x1, y1, x2, y1, clr, size);
-	DrawLine(x1, y2, x2, y2, clr, size);
-	DrawLine(x1, y1, x1, y2, clr, size);
-	DrawLine(x2, y1, x2, y2, clr, size);
-}
-void VGSHelper::DrawFilledBox(float x1, float y1, float x2, float y2, Color clr)
-{
-	g::surface->DrawSetColor(clr);
-	//g_VGuiSurface->DrawSetApparentDepth(size);
-	g::surface->DrawFilledRect(static_cast<int> (x1), static_cast<int> (y1), static_cast<int> (x2), static_cast<int> (y2));
-}
-void VGSHelper::DrawTriangle(int count, Vertex_t* vertexes, Color c)
-{
-	static int Texture = g::surface->CreateNewTextureID(true); // need to make a texture with procedural true
-	unsigned char buffer[4] = { (unsigned char)c.r(), (unsigned char)c.g(), (unsigned char)c.b(), (unsigned char)c.a() }; // r,g,b,a
-
-	g::surface->DrawSetTextureRGBA(Texture, buffer, 1, 1); //Texture, char array of texture, width, height
-	g::surface->DrawSetColor(c); // keep this full color and opacity use the RGBA @top to set values.
-	g::surface->DrawSetTexture(Texture); // bind texture
-
-	g::surface->DrawTexturedPolygon(count, vertexes);
-}
-void VGSHelper::DrawBoxEdges(float x1, float y1, float x2, float y2, Color clr, float edge_size, float size)
-{
-	if (fabs(x1 - x2) < (edge_size * 2))
-	{
-		//x2 = x1 + fabs(x1 - x2);
-		edge_size = fabs(x1 - x2) / 4.f;
-	}
-
-	DrawLine(x1, y1, x1, y1 + edge_size + (0.5f * edge_size), clr, size);
-	DrawLine(x2, y1, x2, y1 + edge_size + (0.5f * edge_size), clr, size);
-	DrawLine(x1, y2, x1, y2 - edge_size - (0.5f * edge_size), clr, size);
-	DrawLine(x2, y2, x2, y2 - edge_size - (0.5f * edge_size), clr, size);
-	DrawLine(x1, y1, x1 + edge_size, y1, clr, size);
-	DrawLine(x2, y1, x2 - edge_size, y1, clr, size);
-	DrawLine(x1, y2, x1 + edge_size, y2, clr, size);
-	DrawLine(x2, y2, x2 - edge_size, y2, clr, size);
-}
-void VGSHelper::DrawCircle(float x, float y, float r, int seg, Color clr)
-{
-	g::surface->DrawSetColor(clr);
-	g::surface->DrawOutlinedCircle(x, y, r, seg);
-}
-
-void VGSHelper::DrawCircle(Vector2D position, float r, int seg, Color clr)
-{
-	g::surface->DrawSetColor(clr);
-	g::surface->DrawOutlinedCircle(position.x, position.y, r, seg);
-}
-
-ImVec2 VGSHelper::GetSize(std::string text, int size)
-{
-	if (!Inited)
-		Init();
-
-	wchar_t buf[256];
-	int x, y;
-
-	if (MultiByteToWideChar(CP_UTF8, 0, text.c_str(), -1, buf, 256))
-	{
-		g::surface->GetTextSize(fonts[size], buf, x, y);
-		return ImVec2(x, y);
-	}
-
-	return ImVec2(0, 0);
 }

@@ -223,9 +223,6 @@
     <ClCompile Include="features\slow_walk.cpp">
       <Filter>features\movement</Filter>
     </ClCompile>
-    <ClCompile Include="features\resolver.cpp">
-      <Filter>features\misc</Filter>
-    </ClCompile>
     <ClCompile Include="features\esp.cpp">
       <Filter>features\visuals</Filter>
     </ClCompile>
@@ -596,9 +593,6 @@
     </ClInclude>
     <ClInclude Include="helpers\fnv.h">
       <Filter>helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="features\esp.hpp">
-      <Filter>features\visuals</Filter>
     </ClInclude>
     <ClInclude Include="features\nade_helper.h">
       <Filter>features\misc</Filter>

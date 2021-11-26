@@ -3,7 +3,6 @@
 #include "../render/render.h"
 #include "../helpers/imdraw.h"
 #include "../helpers/console.h"
-#include "../features/esp.hpp"
 #include "../hooks/hooks.h"
 #include "../helpers/runtime_saver.h"
 #include "../render/render.h"
@@ -175,32 +174,39 @@ namespace visuals
 		left_knife->SetValue(!weapon->IsKnife());
 	}
 
-	void draw_fov(ImDrawList* draw_list, entities::local_data_t& local, int xx, int yy)
+	void draw_fov(ImDrawList* draw_list, entities::local_data_t& data)
 	{
 		if (settings::esp::drawFov)
 		{
 			if (!g::engine_client->IsConnected() || !g::engine_client->IsInGame())
 				return;
 
-			if (local.local != g::local_player)
+			if (data.local != g::local_player)
 				return;
 
-			if (!local.local)
+			if (!data.local)
 				return;
 
-			auto& pWeapon = local.active_weapon;
+			auto& pWeapon = data.active_weapon;
 
 			if (!pWeapon)
 				return;
 
 			const auto& settings = settings::aimbot::m_items[pWeapon->m_iItemDefinitionIndex()];
 
+			int _x, _y;
+
+			g::engine_client->GetScreenSize(_x, _y);
+
+			int xx = _x / 2;
+			int yy = _y / 2;
+
 			if (settings.enabled)
 			{
 				if (!g::engine_client->IsInGame() || !g::engine_client->IsConnected())
 					return;
 
-				if (!local.is_alive)
+				if (!data.is_alive)
 					return;
 
 				if (settings.dynamic_fov)
@@ -222,64 +228,77 @@ namespace visuals
 		}
 	}
 
-	void rcs_cross(ImDrawList* draw_list, entities::local_data_t& local, int xx, int yy)
+	void rcs_cross(ImDrawList* draw_list, entities::local_data_t& data)
 	{
 		if (settings::visuals::rcs_cross)
 		{
 			if (!g::engine_client->IsInGame() || !g::engine_client->IsConnected())
 				return;
 
-			if (!local.is_alive)
+			if (!data.is_alive)
 				return;
 
-			int _x = xx;
-			int _y = yy;
-			int dy = yy / 97;
-			int dx = xx / 97;
+			QAngle viewangles;
+			g::engine_client->GetViewAngles(viewangles);
+			viewangles += data.punch_angle * 2.f;
 
-			_x -= (dx * (local.punch_angle.yaw));
-			_y += (dy * (local.punch_angle.pitch));
+			Vector forward;
+			math::angle2vectors(viewangles, forward);
+			forward *= 10000;
 
-			auto& active_wpn = local.local->m_hActiveWeapon();//local.active_weapon;
+			Vector start = g::local_player->GetEyePos();
+			Vector end = start + forward, out;
+
+			auto& active_wpn = data.local->m_hActiveWeapon();
 
 			if (!active_wpn)
 				return;
+
+			int _x, _y;
+
+			g::engine_client->GetScreenSize(_x, _y);
+
+			int xx = _x / 2;
+			int yy = _y / 2;
 
 			static auto index = active_wpn->m_iItemDefinitionIndex();
 
 			if (index == WEAPON_USP_SILENCER || index == WEAPON_DEAGLE || index == WEAPON_GLOCK || index == WEAPON_REVOLVER || index == WEAPON_HKP2000)
 				return;
 
+			if (!math::world2screen(end, out))
+				return;
+
 			switch (settings::visuals::rcs_cross_mode)
 			{
 			case 0:
-				if (local.shots_fired > 1)
+				if (data.shots_fired > 1)
 				{
-					draw_list->AddLine(ImVec2(_x - 5, _y), ImVec2(_x + 5, _y), ImGui::GetColorU32(settings::visuals::recoilcolor));
-					draw_list->AddLine(ImVec2(_x, _y - 5), ImVec2(_x, _y + 5), ImGui::GetColorU32(settings::visuals::recoilcolor));
+					draw_list->AddLine(ImVec2(out.x - 5.f, out.y), ImVec2(out.x + 5.f, out.y), ImGui::GetColorU32(settings::visuals::recoilcolor));
+					draw_list->AddLine(ImVec2(out.x, out.y - 5.f), ImVec2(out.x, out.y + 5.f), ImGui::GetColorU32(settings::visuals::recoilcolor));
 				}
 				break;
 			case 1:
-				if (local.shots_fired > 1)
+				if (data.shots_fired > 1)
 				{
-					draw_list->AddCircle(ImVec2(_x, _y), settings::visuals::radius, ImGui::GetColorU32(settings::visuals::recoilcolor), 255);
+					draw_list->AddCircle(ImVec2(out.x, out.y), settings::visuals::radius, ImGui::GetColorU32(settings::visuals::recoilcolor), 255);
 				}
 				break;
 			}
 		}
 	}
 
-	void hitmarker(ImDrawList* draw_list, entities::local_data_t& local, int xx, int yy)
+	void hitmarker(ImDrawList* draw_list, entities::local_data_t& data)
 	{
 		if (settings::visuals::hitmarker)
 		{
 			if (!g::engine_client->IsInGame() || !g::engine_client->IsConnected())
 				return;
 
-			if (local.local != g::local_player)
+			if (data.local != g::local_player)
 				return;
 
-			if (!local.local)
+			if (!data.local)
 				return;
 
 			if (g::global_vars->realtime - saver.HitmarkerInfo.HitTime > .5f)
@@ -294,6 +313,13 @@ namespace visuals
 				percent2 = 1.f;
 			}
 
+			int _x, _y;
+
+			g::engine_client->GetScreenSize(_x, _y);
+
+			int xx = _x / 2;
+			int yy = _y / 2;
+
 			percent = 1.f - percent;
 			float addsize = percent2 * 5.f;
 
@@ -304,23 +330,30 @@ namespace visuals
 		}
 	}
 
-	void noscope(ImDrawList* draw_list, entities::local_data_t& local, int xx, int yy)
+	void noscope(ImDrawList* draw_list, entities::local_data_t& data)
 	{
 		if (settings::misc::noscope)
 		{
 			if (!g::engine_client->IsInGame() || !g::engine_client->IsConnected())
 				return;
 
-			if (local.local != g::local_player)
+			if (data.local != g::local_player)
 				return;
 
-			if (!local.local)
+			if (!data.local)
 				return;
 
-			auto& active_wpn = local.active_weapon;
+			auto& active_wpn = data.active_weapon;
 
 			if (!active_wpn)
 				return;
+
+			int _x, _y;
+
+			g::engine_client->GetScreenSize(_x, _y);
+
+			int xx = _x / 2;
+			int yy = _y / 2;
 
 			if (g::local_player->m_bIsScoped() && active_wpn->IsSniper())
 			{
@@ -331,7 +364,7 @@ namespace visuals
 		}
 	}
 
-	void spread_cross(ImDrawList* draw_list, entities::local_data_t& local, int xx, int yy)
+	void spread_cross(ImDrawList* draw_list, entities::local_data_t& local)
 	{
 		if (settings::visuals::spread_cross)
 		{
@@ -357,49 +390,56 @@ namespace visuals
 			if (spread == 0.f)
 				return;
 
+			int _x, _y;
+
+			g::engine_client->GetScreenSize(_x, _y);
+
+			int xx = _x / 2;
+			int yy = _y / 2;
+
 			draw_list->AddCircle(ImVec2(xx, yy), spread, ImGui::GetColorU32(settings::visuals::spread_cross_color), 255);
 			draw_list->AddCircleFilled(ImVec2(xx, yy), spread - 1, ImGui::GetColorU32({ 0.0f, 0.0f, 0.0f, 0.2f }), 255);
 		}
 	}
 
-	void damage_indicator(entities::local_data_t& local)
+	void damage_indicator(entities::local_data_t& data)
 	{
 		if (settings::misc::damage_indicator)
 		{
 			if (!g::engine_client->IsInGame() || !g::engine_client->IsConnected())
 				return;
 
-			if (local.local != g::local_player)
+			if (data.local != g::local_player)
 				return;
 
-			if (!local.local && !local.is_alive)
+			if (!data.local && !data.is_alive)
 				return;
 
-			float CurrentTime = local.tick_base * g::global_vars->interval_per_tick;
+			float CurrentTime = data.tick_base * g::global_vars->interval_per_tick;
 
-			for (int i = 0; i < indicator.size(); i++)
+			for (int i = 0; i < esp::dmg_indicator.size(); i++)
 			{
-				if (indicator[i].flEraseTime < CurrentTime)
+				if (esp::dmg_indicator[i].erase_time < CurrentTime)
 				{
-					indicator.erase(indicator.begin() + i);
+					esp::dmg_indicator.erase(esp::dmg_indicator.begin() + i);
 					continue;
 				}
 
-				if (!indicator[i].bInitialized)
+				if (!esp::dmg_indicator[i].is_initialized)
 				{
-					indicator[i].Position = indicator[i].Player->get_bone_position(8);
-					indicator[i].bInitialized = true;
+					esp::dmg_indicator[i].pos = esp::dmg_indicator[i].player->get_bone_position(8);
+					esp::dmg_indicator[i].is_initialized = true;
 				}
 
-				if (CurrentTime - indicator[i].flLastUpdate > 0.001f)
+				if (CurrentTime - esp::dmg_indicator[i].last_update_time > 0.001f)
 				{
-					indicator[i].Position.z -= (0.5f * (CurrentTime - indicator[i].flEraseTime));
-					indicator[i].flLastUpdate = CurrentTime;
+					esp::dmg_indicator[i].pos.z -= (0.5f * (CurrentTime - esp::dmg_indicator[i].erase_time));
+					esp::dmg_indicator[i].last_update_time = CurrentTime;
 				}
 
-				if (!indicator[i].Player)
+				if (!esp::dmg_indicator[i].player)
 				{
-					indicator.erase(indicator.begin() + i);
+					esp::dmg_indicator.erase(esp::dmg_indicator.begin() + i);
 					continue;
 				}
 
@@ -407,19 +447,19 @@ namespace visuals
 
 				Color color = Color::White;
 
-				if (indicator[i].iDamage >= 100)
+				if (esp::dmg_indicator[i].damage >= 100)
 					color = Color::Red;
 
-				if (indicator[i].iDamage >= 50 && indicator[i].iDamage < 100)
+				if (esp::dmg_indicator[i].damage >= 50 && esp::dmg_indicator[i].damage < 100)
 					color = Color::Orange;
 
-				if (indicator[i].iDamage < 50)
+				if (esp::dmg_indicator[i].damage < 50)
 					color = Color::White;
 
-				if (math::world2screen(indicator[i].Position, ScreenPosition))
+				if (math::world2screen(esp::dmg_indicator[i].pos, ScreenPosition))
 				{
 					ImGui::PushFont(render::fonts::visuals);
-					imdraw::outlined_text(std::to_string(indicator[i].iDamage).c_str(), ImVec2(ScreenPosition.x, ScreenPosition.y), utils::to_im32(color));
+					imdraw::outlined_text(std::to_string(esp::dmg_indicator[i].damage).c_str(), ImVec2(ScreenPosition.x, ScreenPosition.y), utils::to_im32(color));
 					ImGui::PopFont();
 				}
 			}
@@ -500,10 +540,10 @@ namespace visuals
 		ImGui::PopFont();
 
 		damage_indicator(m_local);
-		draw_fov(draw_list, m_local, xx, yy);
-		noscope(draw_list, m_local, xx, yy);
-		spread_cross(draw_list, m_local, xx, yy);
-		hitmarker(draw_list, m_local, xx, yy);
-		rcs_cross(draw_list, m_local, xx, yy);
+		draw_fov(draw_list, m_local);
+		noscope(draw_list, m_local);
+		spread_cross(draw_list, m_local);
+		hitmarker(draw_list, m_local);
+		rcs_cross(draw_list, m_local);
 	}
 }
