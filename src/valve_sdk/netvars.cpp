@@ -32,7 +32,7 @@ netvar_manager::netvar_manager()
 	IF_DUMPING(fclose(s_fp);)
 }
 
-auto netvar_manager::dump_recursive(const char* base_class, RecvTable* table, const std::uint16_t offset) -> void
+auto netvar_manager::dump_recursive(const char* base_class, RecvTable* table, const std::uint32_t offset) -> void
 {
 	for (auto i = 0; i < table->m_nProps; ++i)
 	{
@@ -50,7 +50,7 @@ auto netvar_manager::dump_recursive(const char* base_class, RecvTable* table, co
 			prop_ptr->m_pDataTable != nullptr &&
 			prop_ptr->m_pDataTable->m_pNetTableName[0] == 'D') // Skip shitty tables
 		{
-			dump_recursive(base_class, prop_ptr->m_pDataTable, std::uint16_t(offset + prop_ptr->m_Offset));
+			dump_recursive(base_class, prop_ptr->m_pDataTable, std::uint32_t(offset + prop_ptr->m_Offset));
 		}
 
 		char hash_name[256];
@@ -60,7 +60,7 @@ auto netvar_manager::dump_recursive(const char* base_class, RecvTable* table, co
 		strcat_s(hash_name, prop_ptr->m_pVarName);
 
 		const auto hash = fnv::hash_runtime(hash_name);
-		const auto total_offset = std::uint16_t(offset + prop_ptr->m_Offset);
+		const auto total_offset = std::uint32_t(offset + prop_ptr->m_Offset);
 
 		IF_DUMPING(fprintf(s_fp, "%s\t0x%04X\t%s\n", base_class, total_offset, prop_ptr->m_pVarName);)
 
