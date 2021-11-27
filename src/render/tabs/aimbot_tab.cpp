@@ -340,8 +340,8 @@ namespace render
 					float pitch_perc = (settings->recoil.pitch / pitch_max) * 100.0f;
 					float yaw_perc = (settings->recoil.yaw / yaw_max) * 100.0f;
 
-					ImGui::SliderFloatLeftAlignedCustom("Pitch:", &settings->recoil.pitch, 0.0f, 2.0f, "%.1f%%", &pitch_perc);
-					ImGui::SliderFloatLeftAlignedCustom("Yaw:", &settings->recoil.yaw, 0.0f, 2.0f, "%.1f%%", &yaw_perc);
+					ImGui::SliderFloatLeftAlignedCustom("Pitch:", &settings->recoil.pitch, 0.0f, 2.0f, "%.2f%%", &pitch_perc);
+					ImGui::SliderFloatLeftAlignedCustom("Yaw:", &settings->recoil.yaw, 0.0f, 2.0f, "%.2f%%", &yaw_perc);
 
 					separator("Trigger");
 
