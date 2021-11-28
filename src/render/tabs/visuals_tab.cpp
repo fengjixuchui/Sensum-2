@@ -108,8 +108,7 @@ namespace render
 					{
 						"Left",
 						"Right",
-						"Bottom",
-						"Number"
+						"Bottom"
 					};
 
 					columns(2);

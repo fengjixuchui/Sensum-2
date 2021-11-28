@@ -512,7 +512,7 @@ namespace esp
 				else if (position == 2)
 				{
 					draw_list->AddRectFilled(ImVec2(box.left, box.bottom + 2.f + offset), ImVec2(box.right, box.bottom + 7.f + offset), black_color);
-					draw_list->AddRectFilled(ImVec2(box.left, box.bottom + 3.f + offset), ImVec2(box.right, box.bottom + 6.f + offset), im_color);
+					draw_list->AddRectFilled(ImVec2(box.left, box.bottom + 3.f + offset), ImVec2(box.right - width, box.bottom + 6.f + offset), im_color);
 				}
 			};
 
@@ -521,35 +521,7 @@ namespace esp
 				const auto green = int(data.m_iHealth * 2.55f);
 				const auto red = 255 - green;
 
-				if (settings::esp::health_position == 0 || settings::esp::health_position == 1 || settings::esp::health_position == 2)
-				{
-					render_line(Color(red, green, 0, 255), data.m_iHealth, settings::esp::health_position, false);
-				}
-
-				if (settings::esp::health_position == 3)
-				{
-					char buf[64];
-					sprintf_s(buf, "HP: %1.f", data.m_iHealth);
-
-					static const auto defusing_text_size = ImGui::CalcTextSize(buf);
-
-					//imdraw::outlined_text((const char*)buf, ImVec2(box.left - -10.f, box.top - defusing_text_size.y - -10.0f), white_color);
-
-					auto y_pos = box.bottom + 32.f;
-					if (settings::esp::health && settings::esp::health_position == 2)
-						y_pos += 7.f;
-
-					if (settings::esp::armour && settings::esp::armour_position == 2)
-						y_pos += 7.f;
-
-					if (!settings::esp::ammo)
-						y_pos -= 10.f;
-
-					if (!settings::esp::money)
-						y_pos -= 10.f;
-
-					imdraw::outlined_text(buf, ImVec2(box.left + width / 2.f - defusing_text_size.x / 2.f, y_pos), white_color);
-				}
+				render_line(Color(red, green, 0, 255), data.m_iHealth, settings::esp::health_position, false);
 			}
 
 			if (settings::esp::armour)

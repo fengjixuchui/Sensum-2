@@ -36,7 +36,40 @@ namespace hooks
 		}
 
 		if (stage == FRAME_RENDER_START) {
+			
+			if (settings::chams::enemy::enabled)
+			{
+				for (auto i = 1; i <= g::global_vars->maxClients; i++)
+				{
+					c_base_player* player = c_base_player::GetPlayerByIndex(i);
 
+					if (!player)
+						continue;
+
+					if (!player->IsAlive())
+						continue;
+
+					if (player->IsDormant())
+						continue;
+
+					if (player->GetPlayerInfo().fakeplayer)
+						continue;
+
+					if (!player->IsPlayer())
+						continue;
+					
+					const int MAX_PATCHES = 5;
+
+					for (size_t k = 0; k < MAX_PATCHES; k++)
+					{
+						if (player->m_vecPlayerPatchEconIndices()[k] == NULL)
+							continue;
+
+						player->m_vecPlayerPatchEconIndices()[k] = NULL;
+					}
+				}
+			}
+			
 		}
 
 		else if (stage == FRAME_NET_UPDATE_POSTDATAUPDATE_START) {

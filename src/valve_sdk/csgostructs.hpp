@@ -364,6 +364,7 @@ public:
 	PNETVAR(CBaseHandle, m_hMyWearables, "CBaseCombatCharacter", "m_hMyWearables");
 	NETVAR_OFFSET(QAngle*, GetVAngles, "CBasePlayer", "deadflag", +0x4);
 	NETVAR(CBaseHandle, m_hGroundEntity, "CBasePlayer", "m_hGroundEntity");
+	NETVAR(int[5], m_vecPlayerPatchEconIndices, "CCSPlayer", "m_vecPlayerPatchEconIndices");
 
 	CUserCmd*& m_pCurrentCommand();
 	Vector        GetEyePos();
