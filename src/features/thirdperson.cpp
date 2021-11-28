@@ -45,5 +45,6 @@ void features::thirdperson()
 
 	g::input->m_vecCameraOffset = angles;
 
-	g::local_player->UpdateClientSideAnimation();
+	if (g::input->m_fCameraInThirdPerson)
+	    g::local_player->UpdateVisibilityAllEntities();
 }
