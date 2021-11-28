@@ -174,20 +174,14 @@ namespace visuals
 		left_knife->SetValue(!weapon->IsKnife());
 	}
 
-	void draw_fov(ImDrawList* draw_list, entities::local_data_t& data)
+	void draw_fov(ImDrawList* draw_list)
 	{
 		if (settings::esp::drawFov)
 		{
 			if (!g::engine_client->IsConnected() || !g::engine_client->IsInGame())
 				return;
 
-			if (data.local != g::local_player)
-				return;
-
-			if (!data.local)
-				return;
-
-			auto& pWeapon = data.active_weapon;
+			auto& pWeapon = entities::m_local.active_weapon;
 
 			if (!pWeapon)
 				return;
@@ -206,7 +200,7 @@ namespace visuals
 				if (!g::engine_client->IsInGame() || !g::engine_client->IsConnected())
 					return;
 
-				if (!data.is_alive)
+				if (!entities::m_local.is_alive)
 					return;
 
 				if (settings.dynamic_fov)
@@ -228,19 +222,19 @@ namespace visuals
 		}
 	}
 
-	void rcs_cross(ImDrawList* draw_list, entities::local_data_t& data)
+	void rcs_cross(ImDrawList* draw_list)
 	{
 		if (settings::visuals::rcs_cross)
 		{
 			if (!g::engine_client->IsInGame() || !g::engine_client->IsConnected())
 				return;
 
-			if (!data.is_alive)
+			if (!entities::m_local.is_alive)
 				return;
 
 			QAngle viewangles;
 			g::engine_client->GetViewAngles(viewangles);
-			viewangles += data.punch_angle * 2.f;
+			viewangles += entities::m_local.punch_angle * 2.f;
 
 			Vector forward;
 			math::angle2vectors(viewangles, forward);
@@ -249,7 +243,7 @@ namespace visuals
 			Vector start = g::local_player->GetEyePos();
 			Vector end = start + forward, out;
 
-			auto& active_wpn = data.local->m_hActiveWeapon();
+			auto& active_wpn = entities::m_local.active_weapon;
 
 			if (!active_wpn)
 				return;
@@ -272,14 +266,14 @@ namespace visuals
 			switch (settings::visuals::rcs_cross_mode)
 			{
 			case 0:
-				if (data.shots_fired > 1)
+				if (entities::m_local.shots_fired > 1)
 				{
 					draw_list->AddLine(ImVec2(out.x - 5.f, out.y), ImVec2(out.x + 5.f, out.y), ImGui::GetColorU32(settings::visuals::recoilcolor));
 					draw_list->AddLine(ImVec2(out.x, out.y - 5.f), ImVec2(out.x, out.y + 5.f), ImGui::GetColorU32(settings::visuals::recoilcolor));
 				}
 				break;
 			case 1:
-				if (data.shots_fired > 1)
+				if (entities::m_local.shots_fired > 1)
 				{
 					draw_list->AddCircle(ImVec2(out.x, out.y), settings::visuals::radius, ImGui::GetColorU32(settings::visuals::recoilcolor), 255);
 				}
@@ -288,20 +282,14 @@ namespace visuals
 		}
 	}
 
-	void hitmarker(ImDrawList* draw_list, entities::local_data_t& data)
+	void hitmarker(ImDrawList* draw_list)
 	{
 		if (settings::visuals::hitmarker)
 		{
 			if (!g::engine_client->IsInGame() || !g::engine_client->IsConnected())
 				return;
 
-			if (data.local != g::local_player)
-				return;
-
-			if (!data.local)
-				return;
-
-			if (g::global_vars->realtime - saver.HitmarkerInfo.HitTime > .5f)
+			if (g::global_vars->realtime - saver.HitmarkerInfo.HitTime > 0.5f)
 				return;
 
 			float percent = (g::global_vars->realtime - saver.HitmarkerInfo.HitTime) / .5f;
@@ -330,20 +318,14 @@ namespace visuals
 		}
 	}
 
-	void noscope(ImDrawList* draw_list, entities::local_data_t& data)
+	void noscope(ImDrawList* draw_list)
 	{
 		if (settings::misc::noscope)
 		{
 			if (!g::engine_client->IsInGame() || !g::engine_client->IsConnected())
 				return;
 
-			if (data.local != g::local_player)
-				return;
-
-			if (!data.local)
-				return;
-
-			auto& active_wpn = data.active_weapon;
+			auto& active_wpn = entities::m_local.active_weapon;
 
 			if (!active_wpn)
 				return;
@@ -355,32 +337,25 @@ namespace visuals
 			int xx = _x / 2;
 			int yy = _y / 2;
 
-			if (g::local_player->m_bIsScoped() && active_wpn->IsSniper())
+			const ImVec4 black = ImVec4(0.f, 0.f, 0.f, 1.0f);
+
+			if (entities::m_local.is_scoped && active_wpn->IsSniper())
 			{
-				draw_list->AddLine(ImVec2(0, yy), ImVec2(x, yy), ImGui::GetColorU32(ImVec4{ 0.f, 0.f, 0.f, 1.0f }));
-				draw_list->AddLine(ImVec2(xx, 0), ImVec2(xx, y), ImGui::GetColorU32(ImVec4{ 0.f, 0.f, 0.f, 1.0f }));
-				draw_list->AddCircle(ImVec2(xx, yy), 255, ImGui::GetColorU32(ImVec4{ 0.f, 0.f, 0.f, 1.0f }), 255);
+				draw_list->AddLine(ImVec2(0, yy), ImVec2(_x, yy), ImGui::GetColorU32(black));
+				draw_list->AddLine(ImVec2(xx, 0), ImVec2(xx, _y), ImGui::GetColorU32(black));
+				draw_list->AddCircle(ImVec2(xx, yy), 255, ImGui::GetColorU32(black), 255);
 			}
 		}
 	}
 
-	void spread_cross(ImDrawList* draw_list, entities::local_data_t& local)
+	void spread_cross(ImDrawList* draw_list)
 	{
 		if (settings::visuals::spread_cross)
 		{
 			if (!g::engine_client->IsInGame() || !g::engine_client->IsConnected())
 				return;
 
-			if (local.local != g::local_player)
-				return;
-
-			if (!local.local)
-				return;
-
-			if (!local.is_alive)
-				return;
-
-			auto& active_wpn = local.active_weapon;
+			auto& active_wpn = entities::m_local.active_weapon;
 
 			if (!active_wpn)
 				return;
@@ -402,20 +377,17 @@ namespace visuals
 		}
 	}
 
-	void damage_indicator(entities::local_data_t& data)
+	void damage_indicator()
 	{
 		if (settings::misc::damage_indicator)
 		{
 			if (!g::engine_client->IsInGame() || !g::engine_client->IsConnected())
 				return;
-
-			if (data.local != g::local_player)
+			
+			if (!entities::m_local.is_alive)
 				return;
 
-			if (!data.local && !data.is_alive)
-				return;
-
-			float CurrentTime = data.tick_base * g::global_vars->interval_per_tick;
+			float CurrentTime = entities::m_local.tick_base * g::global_vars->interval_per_tick;
 
 			for (int i = 0; i < esp::dmg_indicator.size(); i++)
 			{
@@ -539,11 +511,11 @@ namespace visuals
 		}
 		ImGui::PopFont();
 
-		damage_indicator(m_local);
-		draw_fov(draw_list, m_local);
-		noscope(draw_list, m_local);
-		spread_cross(draw_list, m_local);
-		hitmarker(draw_list, m_local);
-		rcs_cross(draw_list, m_local);
+		damage_indicator();
+		draw_fov(draw_list);
+		noscope(draw_list);
+		spread_cross(draw_list);
+		hitmarker(draw_list);
+		rcs_cross(draw_list);
 	}
 }
