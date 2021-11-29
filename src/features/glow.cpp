@@ -85,7 +85,8 @@ namespace visuals
 				objects.full_bloom_render(false);
 				objects.glow_style(0);
 			}
-			else if (settings::glow::misc::nades::enabled && class_id == EClassId::CBaseCSGrenade || class_id == EClassId::CBaseCSGrenadeProjectile ||
+
+			if (settings::glow::misc::nades::enabled && class_id == EClassId::CBaseCSGrenade || class_id == EClassId::CBaseCSGrenadeProjectile ||
 				class_id == EClassId::CDecoyGrenade || class_id == EClassId::CHEGrenade || class_id == EClassId::CIncendiaryGrenade || class_id == EClassId::CMolotovProjectile || class_id == EClassId::CMolotovGrenade ||
 				class_id == EClassId::CSensorGrenade || class_id == EClassId::CSensorGrenadeProjectile || class_id == EClassId::CSmokeGrenade || class_id == EClassId::CSmokeGrenadeProjectile ||
 				class_id == EClassId::ParticleSmokeGrenade || class_id == EClassId::CBaseGrenade && entity && entity->m_nExplodeEffectTickBegin() < 1) {
@@ -96,7 +97,8 @@ namespace visuals
 				objects.full_bloom_render(false);
 				objects.glow_style(0);
 			}
-			else if (entity->IsWeapon() && settings::glow::misc::weapons::enabled && class_id == EClassId::CAK47 || class_id == EClassId::CDEagle || class_id == EClassId::CC4 ||
+
+			if (settings::glow::misc::weapons::enabled && entity->IsWeapon() && class_id == EClassId::CAK47 || class_id == EClassId::CDEagle || class_id == EClassId::CC4 ||
 				class_id >= EClassId::CWeaponAug && class_id <= EClassId::CWeaponXM1014) {
 
 				objects.color(settings::glow::misc::weapons::color);
@@ -105,7 +107,8 @@ namespace visuals
 				objects.full_bloom_render(false);
 				objects.glow_style(0);
 			}
-			else if (settings::glow::misc::kits::enabled && class_id == EClassId::CEconEntity)
+
+			if (settings::glow::misc::kits::enabled && class_id == EClassId::CEconEntity)
 			{
 				objects.color(settings::glow::misc::kits::color);
 				objects.render_when_occluded(true);
