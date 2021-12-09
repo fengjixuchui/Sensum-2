@@ -15,91 +15,91 @@ jobs:
             {
               "type": "title",
               "regex": "d3dx9.lib",
-              "message": "blacklisted word was detected.Please dont create discussion in the discussion tab about this topic, You will get blocked."
+              "message": "Blacklisted word was detected, please use your brain and dont spam My repo with problems that can be fixed by searching Google.Thanks"
             },
             {
               "type": "title",
               "regex": "Compile",
-              "message": "blacklisted word was detected.Please dont create discussion in the discussion tab about this topic, You will get blocked."
+              "message": "Blacklisted word was detected, please use your brain and dont spam My repo with problems that can be fixed by searching Google.Thanks"
             },
             {
               "type": "title",
               "regex": "compile",
-              "message": "blacklisted word was detected.Please dont create discussion in the discussion tab about this topic, You will get blocked."
+              "message": "Blacklisted word was detected, please use your brain and dont spam My repo with problems that can be fixed by searching Google.Thanks"
             },
             {
               "type": "title",
               "regex": "cant compile",
-              "message": "blacklisted word was detected.Please dont create discussion in the discussion tab about this topic, You will get blocked."
+              "message": "Blacklisted word was detected, please use your brain and dont spam My repo with problems that can be fixed by searching Google.Thanks"
             },
             {
               "type": "title",
               "regex": "Cant compile",
-              "message": "blacklisted word was detected.Please dont create discussion in the discussion tab about this topic, You will get blocked."
+              "message": "Blacklisted word was detected, please use your brain and dont spam My repo with problems that can be fixed by searching Google.Thanks"
             },
             {
               "type": "title",
               "regex": "Cant Compile",
-              "message": "blacklisted word was detected.Please dont create discussion in the discussion tab about this topic, You will get blocked."
+              "message": "Blacklisted word was detected, please use your brain and dont spam My repo with problems that can be fixed by searching Google.Thanks"
             },
             {
               "type": "title",
               "regex": "Can't compile",
-              "message": "blacklisted word was detected.Please dont create discussion in the discussion tab about this topic, You will get blocked."
+              "message": "Blacklisted word was detected, please use your brain and dont spam My repo with problems that can be fixed by searching Google.Thanks"
             },
             {
               "type": "title",
               "regex": "Error",
-              "message": "blacklisted word was detected.Please dont create discussion in the discussion tab about this topic, You will get blocked."
+              "message": "Blacklisted word was detected, please use your brain and dont spam My repo with problems that can be fixed by searching Google.Thanks"
             },
             {
               "type": "title",
               "regex": "error",
-              "message": "blacklisted word was detected.Please dont create discussion in the discussion tab about this topic, You will get blocked."
+              "message": "Blacklisted word was detected, please use your brain and dont spam My repo with problems that can be fixed by searching Google.Thanks"
             },
             {
               "type": "title",
               "regex": "Error when building",
-              "message": "blacklisted word was detected.Please dont create discussion in the discussion tab about this topic, You will get blocked."
+              "message": "Blacklisted word was detected, please use your brain and dont spam My repo with problems that can be fixed by searching Google.Thanks"
             },
             {
               "type": "title",
               "regex": "missing",
-              "message": "blacklisted word was detected.Please dont create discussion in the discussion tab about this topic, You will get blocked."
+              "message": "Blacklisted word was detected, please use your brain and dont spam My repo with problems that can be fixed by searching Google.Thanks"
             },
             {
               "type": "title",
               "regex": "d3dx9",
-              "message": "blacklisted word was detected.Please dont create discussion in the discussion tab about this topic, You will get blocked."
+              "message": "Blacklisted word was detected, please use your brain and dont spam My repo with problems that can be fixed by searching Google.Thanks"
             },
             {
               "type": "title",
               "regex": "include",
-              "message": "blacklisted word was detected.Please dont create discussion in the discussion tab about this topic, You will get blocked."
+              "message": "Blacklisted word was detected, please use your brain and dont spam My repo with problems that can be fixed by searching Google.Thanks"
             },
             {
               "type": "title",
               "regex": "build",
-              "message": "blacklisted word was detected.Please dont create discussion in the discussion tab about this topic, You will get blocked."
+              "message": "Blacklisted word was detected, please use your brain and dont spam My repo with problems that can be fixed by searching Google.Thanks"
             },
             {
               "type": "title",
               "regex": "compiling",
-              "message": "blacklisted word was detected.Please dont create discussion in the discussion tab about this topic, You will get blocked."
+              "message": "Blacklisted word was detected, please use your brain and dont spam My repo with problems that can be fixed by searching Google.Thanks"
             },
             {
               "type": "title",
               "regex": "inject",
-              "message": "blacklisted word was detected.Please dont create discussion in the discussion tab about this topic, You will get blocked."
+              "message": "Blacklisted word was detected, please use your brain and dont spam My repo with problems that can be fixed by searching Google.Thanks"
             },
             {
               "type": "title",
               "regex": "banned",
-              "message": "blacklisted word was detected.Please dont create discussion in the discussion tab about this topic, You will get blocked."
+              "message": "Blacklisted word was detected, please use your brain and dont spam My repo with problems that can be fixed by searching Google.Thanks"
             },
             {
               "type": "title",
               "regex": "ban",
-              "message": "blacklisted word was detected.Please dont create discussion in the discussion tab about this topic, You will get blocked."
+              "message": "Blacklisted word was detected, please use your brain and dont spam My repo with problems that can be fixed by searching Google.Thanks"
             }
           ]
