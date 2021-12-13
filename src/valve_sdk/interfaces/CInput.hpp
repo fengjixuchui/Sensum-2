@@ -10,26 +10,30 @@ class bf_read;
 class CInput
 {
 public:
-	char pad_0000[172]; //0x0000
-	bool N0000004E; //0x00AC
-	bool m_fCameraInThirdPerson; //0x00AD
-	char pad_00AE[2]; //0x00AE
-	QAngle m_vecCameraOffset; //0x00B0
-public:
-	inline CUserCmd* GetUserCmd(int sequence_number);
-	inline CVerifiedUserCmd* GetVerifiedCmd(int sequence_number);
+	std::byte			pad0[0xC];				//0x0000
+    bool				bTrackIRAvailable;		//0x000C
+    bool				bMouseInitialized;		//0x000D
+    bool				bMouseActive;			//0x000E
+    std::byte			pad1[0xB2];				//0x000F
+    bool				m_fCameraInThirdPerson;	//0x00C1
+    std::byte			pad2[0x2];				//0x00C2
+    QAngle				m_vecCameraOffset;		//0x00C4
+    std::byte			pad3[0x38];				//0x00D0
+    CUserCmd* m_pCommands;				//0x0108
+    CVerifiedUserCmd* pVerifiedCommands;		//0x010C
+
+    CUserCmd* GetUserCmd(const int nSequenceNumber) const
+    {
+        return &m_pCommands[nSequenceNumber % MULTIPLAYER_BACKUP];
+    }
+
+    CVerifiedUserCmd* GetVerifiedCmd(const int nSequenceNumber) const
+    {
+        return &pVerifiedCommands[nSequenceNumber % MULTIPLAYER_BACKUP];
+    }
+
+    CUserCmd* GetUserCmd(int slot, int sequence_number)
+    {
+        return &m_pCommands[slot, sequence_number % MULTIPLAYER_BACKUP];
+    }
 };
-
-CUserCmd* CInput::GetUserCmd(int sequence_number)
-{
-	return &(*(CUserCmd * *)((DWORD)this + 0xF4))[sequence_number % MULTIPLAYER_BACKUP];
-
-	//return &m_pCommands[sequence_number % MULTIPLAYER_BACKUP];
-}
-
-CVerifiedUserCmd* CInput::GetVerifiedCmd(int sequence_number)
-{
-	return &(*(CVerifiedUserCmd * *)((DWORD)this + 0xF8))[sequence_number % MULTIPLAYER_BACKUP];
-
-	//return &m_pVerifiedCommands[sequence_number % MULTIPLAYER_BACKUP];
-}

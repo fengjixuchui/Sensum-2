@@ -33,7 +33,7 @@
 #define SET_ABS_ORIGIN			xorstr_("client.dll"), xorstr_("55 8B EC 83 E4 F8 51 53 56 57 8B F1 E8")
 #define INRELOAD				xorstr_("client.dll"), xorstr_("C6 87 ? ? ? ? ? 8B 06 8B CE FF 90")
 #define OVERRIDE_BLUR			xorstr_("client.dll"), xorstr_("80 3D ? ? ? ? ? 53 56 57 0F 85")
-#define FIND_HUD				xorstr_("client.dll"), xorstr_("55 8B EC 53 8B 5D 08 56 57 8B F9 33 F6 39 77 28")
+#define FIND_HUD				xorstr_("client.dll"), xorstr_("55 8B EC 53 8B 5D 08 56 57 8B F9 33 F6 39")
 #define UPDATE_VISIBILITY_ENTITIES xorstr_("client.dll"), xorstr_("53 56 66 8B ? ? ? ? ? ? FF FF ? ? 57 90")
 #define UPDATE_ANIM_STATE		xorstr_("client.dll"), xorstr_("55 8B EC 83 E4 F8 83 EC 18 56 57 8B F9 F3 0F 11 54 24")
 #define SET_ABS_ANGLE			xorstr_("client.dll"), xorstr_("55 8B EC 83 E4 F8 83 EC 64 53 56 57 8B F1 E8")

@@ -298,12 +298,6 @@
     <ClCompile Include="features\selfnade.cpp">
       <Filter>features\misc</Filter>
     </ClCompile>
-    <ClCompile Include="features\hegrenade_helper.cpp">
-      <Filter>features\misc</Filter>
-    </ClCompile>
-    <ClCompile Include="features\molotov_helper.cpp">
-      <Filter>features\misc</Filter>
-    </ClCompile>
     <ClCompile Include="valve_sdk\kit_parser.cpp">
       <Filter>valve_sdk</Filter>
     </ClCompile>
@@ -638,12 +632,6 @@
     </ClInclude>
     <ClInclude Include="valve_sdk\interfaces\IDemoPlayer.h">
       <Filter>valve_sdk\interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="features\hegrenade_helper.h">
-      <Filter>features\misc</Filter>
-    </ClInclude>
-    <ClInclude Include="features\molotov_helper.h">
-      <Filter>features\misc</Filter>
     </ClInclude>
     <ClInclude Include="valve_sdk\kit_parser.hpp">
       <Filter>valve_sdk</Filter>
