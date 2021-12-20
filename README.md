@@ -1,4 +1,14 @@
-# Sensum - Internal legit cheat
+## ***Development of Sensum stopped, I cant take care and maintain 2 cheats at once.***
+
+## Sensum - Internal legit cheat
+### Operation Riptide broke the cheat, list of bugs/problems so far:
+
+
+
+- Aimbot was locking on backtrack records.
+- Backtrack isnt working
+- Both Autowall and Hitchance arent working, because trace.hitgroup is returning nonsense values.
+- Glow drops ~50 fps (Not the cheat's issue, I would have to rebuild the glow completely to eliminate fps drops, its kinda Valve's problem.)
 
 [**List of features**](https://pastebin.com/twMkYr0q) | ***Check the Discussions tab to request a feature.***
 
